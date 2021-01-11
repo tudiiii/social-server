@@ -18,18 +18,6 @@ public class JdbcUserRepository {
     public JdbcUserRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-//
-//    public List<User> getAllUsers() {
-//        return jdbcTemplate.query("select * from users",
-//                (rs, rowNum)-> new User(
-//                        rs.getLong("seq"),
-//                        rs.getString("email"),
-//                        rs.getString("passwd"),
-//                        rs.getInt("login_count"),
-//                        LocalDateTime.ofInstant(rs.getDate("last_login_at").toInstant(), ZoneId.systemDefault()),
-//                        LocalDateTime.ofInstant(rs.getDate("create_at").toInstant(), ZoneId.systemDefault())
-//                ));
-//    }
 
     private final RowMapper<User> userRowMapper = ((resultSet, i) -> new User(
             resultSet.getLong("seq"),
@@ -41,8 +29,13 @@ public class JdbcUserRepository {
     ));
 
 
-    public List<User> userList() throws DataAccessException {
+    public List<User> allUserList() throws DataAccessException {
         String query = "SELECT * FROM USER";
         return jdbcTemplate.query(query, userRowMapper);
+    }
+
+    public User userInfoList(String email) throws DataAccessException{
+        String query = "SELECT * FROM USER WHERE email = ?";
+        return jdbcTemplate.queryForObject(query,userRowMapper,email);
     }
 }

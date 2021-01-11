@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface UserService {
     List<UserListResponseDto> allUserList();
+    UserListResponseDto userInfoList(String email);
 }

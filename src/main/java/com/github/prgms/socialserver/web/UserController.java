@@ -3,9 +3,7 @@ package com.github.prgms.socialserver.web;
 import com.github.prgms.socialserver.domain.user.User;
 import com.github.prgms.socialserver.service.UserService;
 import com.github.prgms.socialserver.web.dto.UserListResponseDto;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,8 +18,13 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public List<UserListResponseDto> userList(){
+    public List<UserListResponseDto> getAllUserList(){
         return userService.allUserList();
+    }
+
+    @GetMapping("/users/{email}")
+    public UserListResponseDto getUserList(@PathVariable String email){
+        return userService.userInfoList(email);
     }
 
 }

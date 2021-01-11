@@ -17,8 +17,12 @@ public class UserServiceImpl implements UserService{
     }
 
     public List<UserListResponseDto> allUserList(){
-        return jdbcUserRepository.userList().stream()
+        return jdbcUserRepository.allUserList().stream()
                 .map(UserListResponseDto::new) // user -> new UserListResponseDto((user))
                 .collect(Collectors.toList());
+    }
+
+    public UserListResponseDto userInfoList(String email) {
+        return new UserListResponseDto(jdbcUserRepository.userInfoList(email));
     }
 }
