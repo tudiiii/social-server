@@ -2,7 +2,10 @@ package com.github.prgms.socialserver.service;
 
 import com.github.prgms.socialserver.domain.user.User;
 import com.github.prgms.socialserver.repository.JdbcUserRepository;
+import com.github.prgms.socialserver.web.dto.PostsUserRequestDto;
+import com.github.prgms.socialserver.web.dto.PostsUserResponseDto;
 import com.github.prgms.socialserver.web.dto.UserListResponseDto;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,5 +27,17 @@ public class UserServiceImpl implements UserService{
 
     public UserListResponseDto userInfoList(String email) {
         return new UserListResponseDto(jdbcUserRepository.userInfoList(email));
+    }
+
+    public PostsUserResponseDto registerUser(PostsUserRequestDto postsUserRequestDto) {
+        User user = PostsUserRequestDto.BuilderUser(postsUserRequestDto);
+        try{
+            jdbcUserRepository.registerUser(user);
+        } catch (DataAccessException e){
+            return new PostsUserResponseDto(false, "가입실패");
+        } finally {
+            return new PostsUserResponseDto(true, "가입성공");
+        }
+
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 @Repository
@@ -37,5 +36,10 @@ public class JdbcUserRepository {
     public User userInfoList(String email) throws DataAccessException{
         String query = "SELECT * FROM USER WHERE email = ?";
         return jdbcTemplate.queryForObject(query,userRowMapper,email);
+    }
+
+    public boolean registerUser(User user) throws DataAccessException{
+        String query = "INSERT INTO(email,passWd) USER VALUER(?,?)";
+        return  jdbcTemplate.update(query,userRowMapper,user.getEmail(),user.getPassWd())==1;
     }
 }

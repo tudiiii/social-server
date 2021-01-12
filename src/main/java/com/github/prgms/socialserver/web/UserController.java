@@ -2,6 +2,8 @@ package com.github.prgms.socialserver.web;
 
 import com.github.prgms.socialserver.domain.user.User;
 import com.github.prgms.socialserver.service.UserService;
+import com.github.prgms.socialserver.web.dto.PostsUserRequestDto;
+import com.github.prgms.socialserver.web.dto.PostsUserResponseDto;
 import com.github.prgms.socialserver.web.dto.UserListResponseDto;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,4 +29,9 @@ public class UserController {
         return userService.userInfoList(email);
     }
 
+    @PostMapping("/users/join")
+    public PostsUserResponseDto insertUser(@RequestBody PostsUserRequestDto postsUserRequestDto){
+        System.out.println(postsUserRequestDto.getCredentials());
+        return userService.registerUser(postsUserRequestDto);
+    }
 }
