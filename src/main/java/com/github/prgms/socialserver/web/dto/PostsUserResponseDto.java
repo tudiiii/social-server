@@ -4,10 +4,6 @@ public class PostsUserResponseDto {
     private boolean success;
     private String response;
 
-    public PostsUserResponseDto() {
-
-    }
-
     public boolean isSuccess() {
         return success;
     }

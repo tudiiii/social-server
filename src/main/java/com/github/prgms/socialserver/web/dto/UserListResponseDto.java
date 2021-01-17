@@ -16,7 +16,6 @@ public class UserListResponseDto {
     public String getEmail() {
         return email;
     }
-
     public String getPassWd() {
         return passWd;
     }

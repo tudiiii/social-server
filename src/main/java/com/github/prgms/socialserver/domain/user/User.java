@@ -31,10 +31,6 @@ public class User {
         return new UserBuilder();
     }
 
-    public static UserBuilder builder(Long seq, LocalDateTime createAt) {
-        return new UserBuilder(seq, createAt);
-    }
-
     public static class UserBuilder {
         private Long seq;
         private String email;
