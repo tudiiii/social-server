@@ -5,18 +5,22 @@ import com.github.prgms.socialserver.repository.JdbcUserRepository;
 import com.github.prgms.socialserver.web.dto.PostsUserRequestDto;
 import com.github.prgms.socialserver.web.dto.PostsUserResponseDto;
 import com.github.prgms.socialserver.web.dto.UserListResponseDto;
+import org.springframework.context.MessageSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService{
     private final JdbcUserRepository jdbcUserRepository;
+    private final MessageSource messageSource;
 
-    public UserServiceImpl(JdbcUserRepository userRepository){
+    public UserServiceImpl(JdbcUserRepository userRepository, MessageSource messageSource) {
         this.jdbcUserRepository = userRepository;
+        this.messageSource = messageSource;
     }
 
     public List<UserListResponseDto> allUserList(){
@@ -30,13 +34,12 @@ public class UserServiceImpl implements UserService{
     }
 
     public PostsUserResponseDto registerUser(PostsUserRequestDto postsUserRequestDto) {
-        User user = PostsUserRequestDto.BuilderUser(postsUserRequestDto);
+        User user = PostsUserRequestDto.toEntity(postsUserRequestDto);
+
         try{
-            jdbcUserRepository.registerUser(user);
+            return new PostsUserResponseDto(true, messageSource.getMessage("message.user.success", null, Locale.ENGLISH));
         } catch (DataAccessException e){
-            return new PostsUserResponseDto(false, "가입실패");
-        } finally {
-            return new PostsUserResponseDto(true, "가입성공");
+            return new PostsUserResponseDto(false, messageSource.getMessage("message.user.fail", null, Locale.ENGLISH));
         }
 
     }

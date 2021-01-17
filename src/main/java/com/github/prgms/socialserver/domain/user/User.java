@@ -3,6 +3,7 @@ package com.github.prgms.socialserver.domain.user;
 import java.time.LocalDateTime;
 
 public class User {
+
     private final Long seq;
     private String email;
     private String passWd;
@@ -10,40 +11,28 @@ public class User {
     private LocalDateTime lastLoginAt;
     private final LocalDateTime createAt;
 
-    public User(Long seq, String email, String passWd, Integer loginCount, LocalDateTime lastLoginAt, LocalDateTime createAt) {
-        this.seq = seq;
-        this.email = email;
-        this.passWd = passWd;
-        this.loginCount = loginCount;
-        this.lastLoginAt = lastLoginAt;
-        this.createAt = createAt;
-    }
-
-    public long getSeq() {
-        return seq;
+    public User(UserBuilder builder) {
+        this.seq = builder.seq;
+        this.email = builder.email;
+        this.passWd = builder.passWd;
+        this.loginCount = builder.loginCount;
+        this.lastLoginAt = builder.lastLoginAt;
+        this.createAt = builder.createAt;
     }
 
     public String getEmail() {
         return email;
     }
-
     public String getPassWd() {
         return passWd;
     }
 
-    public int getLoginCount() {
-        return loginCount;
-    }
-
-    public LocalDateTime getLastLoginAt() {
-        return lastLoginAt;
-    }
-
-    public LocalDateTime getCreateAt() {
-        return createAt;
-    }
     public static UserBuilder builder() {
         return new UserBuilder();
+    }
+
+    public static UserBuilder builder(Long seq, LocalDateTime createAt) {
+        return new UserBuilder(seq, createAt);
     }
 
     public static class UserBuilder {
@@ -54,11 +43,20 @@ public class User {
         private LocalDateTime lastLoginAt;
         private LocalDateTime createAt;
 
+        UserBuilder() {
+        }
+
+        public UserBuilder(Long seq, LocalDateTime createAt) {
+            this.seq = seq;
+            this.createAt = createAt;
+        }
+
         public UserBuilder email(String email) {
             this.email = email;
             return this;
         }
-        public UserBuilder password(String passWd) {
+
+        public UserBuilder passWd(String passWd) {
             this.passWd = passWd;
             return this;
         }
@@ -66,15 +64,6 @@ public class User {
         public User build() {
             return new User(this);
         }
-
-    }
-
-    private User(UserBuilder builder) {
-        this.seq = builder.seq;
-        this.email = builder.email;
-        this.passWd = builder.passWd;
-        this.createAt = builder.createAt;
-        this.loginCount = builder.loginCount;
     }
 
 }

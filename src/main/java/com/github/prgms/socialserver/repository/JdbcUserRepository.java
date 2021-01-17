@@ -1,12 +1,9 @@
 package com.github.prgms.socialserver.repository;
 
 import com.github.prgms.socialserver.domain.user.User;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -18,28 +15,27 @@ public class JdbcUserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private final RowMapper<User> userRowMapper = ((resultSet, i) -> new User(
-            resultSet.getLong("seq"),
-            resultSet.getString("email"),
-            resultSet.getString("passwd"),
-            resultSet.getInt("login_count"),
-            resultSet.getObject("last_login_at", LocalDateTime.class),
-            resultSet.getObject("create_at", LocalDateTime.class)
-    ));
-
-
-    public List<User> allUserList() throws DataAccessException {
+    public List<User> allUserList() {
         String query = "SELECT * FROM USER";
-        return jdbcTemplate.query(query, userRowMapper);
+        return jdbcTemplate.query(query,
+                (rs, rowNum) -> User.builder()
+                        .email(rs.getString("email"))
+                        .passWd(rs.getString("passwd"))
+                        .build());
     }
 
-    public User userInfoList(String email) throws DataAccessException{
+    public User userInfoList(String email){
         String query = "SELECT * FROM USER WHERE email = ?";
-        return jdbcTemplate.queryForObject(query,userRowMapper,email);
+        return jdbcTemplate.queryForObject(query,
+                (rs, rowNum) -> User.builder()
+                        .email(rs.getString("email"))
+                        .passWd(rs.getString("passwd"))
+                        .build());
+
     }
 
-    public boolean registerUser(User user) throws DataAccessException{
-        String query = "INSERT INTO(email,passWd) USER VALUER(?,?)";
-        return  jdbcTemplate.update(query,userRowMapper,user.getEmail(),user.getPassWd())==1;
+    public boolean registerUser(User user){
+        String query = "INSERT INTO USER (email,passwd) VALUES(?,?)";
+        return  jdbcTemplate.update(query,user.getEmail(),user.getPassWd())==1;
     }
 }

@@ -5,6 +5,7 @@ import com.github.prgms.socialserver.service.UserService;
 import com.github.prgms.socialserver.web.dto.PostsUserRequestDto;
 import com.github.prgms.socialserver.web.dto.PostsUserResponseDto;
 import com.github.prgms.socialserver.web.dto.UserListResponseDto;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +32,6 @@ public class UserController {
 
     @PostMapping("/users/join")
     public PostsUserResponseDto insertUser(@RequestBody PostsUserRequestDto postsUserRequestDto){
-        System.out.println(postsUserRequestDto.getCredentials());
         return userService.registerUser(postsUserRequestDto);
     }
 }
